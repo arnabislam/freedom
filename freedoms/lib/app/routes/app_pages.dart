@@ -1,4 +1,4 @@
-import 'package:freedoms/app/modules/delivery/views/quick_delivery_view.dart';
+import 'package:freedoms/app/modules/delivery/views/quick_delivery_bag_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/delivery/bindings/delivery_binding.dart';
@@ -15,7 +15,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => const QuickDeliveryView(),
+      page: () => const QuickDeliveryBagView(),
       binding: HomeBinding(),
     ),
     GetPage(
