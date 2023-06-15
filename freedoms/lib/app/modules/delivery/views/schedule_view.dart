@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:freedoms/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ScheduleView extends StatelessWidget {
   const ScheduleView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // final ScheduleController controller =
+    // Get.put(ScheduleController as ScheduleController);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff351044),
@@ -43,6 +46,14 @@ class ScheduleView extends StatelessWidget {
                     children: [
                       Column(
                         children: [
+                          // Obx(
+                          //   () => Text(
+                          //     DateFormat("dd-MM-yyyy")
+                          //         .format(controller.selectedDate.value)
+                          //         .toString(),
+                          //     style: TextStyle(fontSize: 15),
+                          //   ),
+                          // ),
                           Text(
                             'Pickup Date',
                             style: GoogleFonts.lato(
@@ -62,18 +73,20 @@ class ScheduleView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                     color: Colors.black, width: 2.0)),
-                            child: Center(
-                              child: Text(
-                                '25-02-2020',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 22),
-                              ),
-                            ),
-                          ),
+
+                            child: MyDatePicker(),
+                            // child: Center(
+                            //   child: Text(
+                            //     '25-02-2020',
+                            //     style: TextStyle(
+                            //         color: Colors.grey, fontSize: 22),
+                            //   ),
+                            // ),
+                          )
                         ],
                       ),
                       SizedBox(
-                        height: 10,
+                        width: 10,
                       ),
                       Column(
                         children: [
@@ -96,13 +109,15 @@ class ScheduleView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                     color: Colors.black, width: 2.0)),
-                            child: Center(
-                              child: Text(
-                                '07:12 am',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 22),
-                              ),
-                            ),
+                            // child: Center(
+                            //   child: Text(
+                            //     '07:12 am',
+                            //     style:
+                            //         TextStyle(color: Colors.grey, fontSize: 22),
+                            //   ),
+                            // ),
+
+                            child: MyTimePicker(),
                           ),
                         ],
                       )
@@ -326,6 +341,103 @@ class ScheduleView extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//Date Picker
+class MyDatePicker extends StatefulWidget {
+  @override
+  _MyDatePickerState createState() => _MyDatePickerState();
+}
+
+class _MyDatePickerState extends State<MyDatePicker> {
+  DateTime? selectedDate;
+
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _selectDate,
+      child: Container(
+        height: 40,
+        width: 125,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.black, width: 2.0),
+        ),
+        child: Center(
+          child: Text(
+            selectedDate != null
+                ? DateFormat("dd-MM-yyyy").format(selectedDate!).toString()
+                : 'Select Date',
+            style: TextStyle(color: Colors.grey, fontSize: 22),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//Time Picker
+
+class MyTimePicker extends StatefulWidget {
+  @override
+  _MyTimePickerState createState() => _MyTimePickerState();
+}
+
+class _MyTimePickerState extends State<MyTimePicker> {
+  TimeOfDay? selectedTime;
+
+  Future<void> _selectTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+    );
+
+    if (picked != null && picked != selectedTime) {
+      setState(() {
+        selectedTime = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _selectTime,
+      child: Container(
+        height: 40,
+        width: 125,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.black, width: 2.0),
+        ),
+        child: Center(
+          child: Text(
+            selectedTime != null
+                ? selectedTime!.format(context)
+                : 'Select Time',
+            style: TextStyle(color: Colors.grey, fontSize: 22),
           ),
         ),
       ),
